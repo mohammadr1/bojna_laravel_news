@@ -91,7 +91,7 @@
                                 <i class="far fa-clock me-1"></i> {{ jdate($news->published_at)->format('Y/m/d') }}
                             </span>
                             <span class="news-author text-muted ms-3">
-                                <i class="far fa-user me-1"></i> {{ $news->author->name ?? 'نامشخص' }}
+                                <i class="far fa-user me-1"></i> {{ $news->author->display_name ?? 'نامشخص' }}
                             </span>
                         </div>
                     </div>

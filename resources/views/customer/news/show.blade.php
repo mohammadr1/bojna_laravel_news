@@ -31,6 +31,9 @@
                         <i class="far fa-calendar me-1"></i>
                         <span>{{ jdate($news->published_at)->format('%d %B %Y') }}</span>
                         {{-- خروجی مثال: ۱۵ مرداد ۱۴۰۲ --}}
+                    <span class="news-author text-muted ms-3">
+                                <i class="far fa-user me-1"></i> {{ $news->author->display_name ?? 'نامشخص' }}
+                            </span>
                     </div>
                     {{-- <div class="mb-2">
                         <i class="far fa-eye me-1"></i>

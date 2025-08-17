@@ -23,7 +23,7 @@ class CategorySeeder extends Seeder
             'اقتصادی',
             'فرهنگی',
             'ورزشی',
-            'صوت‌وتصویر',
+            'چندرسانه',
         ];
 
         foreach ($categories as $title) {

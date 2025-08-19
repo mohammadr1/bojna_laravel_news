@@ -191,7 +191,7 @@ public static function table(Table $table): Table
                 ->disk('public') // اگر از disk public استفاده می‌کنی
                 ->url(fn ($record) => asset('storage/thumbnails/' . $record->thumbnail)), // مسیر دستی
 
-            TextColumn::make('author.name')
+            TextColumn::make('author.display_name')
                 ->label('نویسنده')
                 ->sortable()
                 ->searchable(),

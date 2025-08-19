@@ -29,6 +29,7 @@ use App\Filament\Resources\NewsResource\RelationManagers;
 use App\Models\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class NewsResource extends Resource
 {
@@ -40,6 +41,19 @@ class NewsResource extends Resource
     protected static ?string $modelLabel = 'اخبار';         // عنوان مفرد
     protected static ?string $pluralLabel = 'اخبار';          // جمع
     protected static ?string $navigationLabel = 'اخبار';      // عنوان در سایدبار
+
+    // فعال کردن خبر برای هر کاربر جدا
+    //     public static function getEloquentQuery(): Builder
+    // {
+    //     $query = parent::getEloquentQuery();
+
+    //     // فقط خبرهای کاربر لاگین‌شده
+    //     if (Auth::check()) {
+    //         $query->where('author_id', Auth::id());
+    //     }
+
+    //     return $query;
+    // }
 
     public static function getNavigationSort(): int
     {
@@ -177,6 +191,10 @@ public static function table(Table $table): Table
                 ->disk('public') // اگر از disk public استفاده می‌کنی
                 ->url(fn ($record) => asset('storage/thumbnails/' . $record->thumbnail)), // مسیر دستی
 
+            TextColumn::make('author.name')
+                ->label('نویسنده')
+                ->sortable()
+                ->searchable(),
 
             TextColumn::make('title')
                 ->label('عنوان')

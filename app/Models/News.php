@@ -18,6 +18,7 @@ class News extends Model
         'subtitle',
         'content_type',
         'image',
+        'media_path',
         'body',
         'meta_description',
         'author_id',

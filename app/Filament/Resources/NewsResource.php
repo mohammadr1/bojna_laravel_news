@@ -104,11 +104,59 @@ public static function form(Form $form): Form
                 ->fileAttachmentsDirectory('uploads/news') // محل ذخیره عکس‌ها
                 ->columnSpanFull(),
 
-            FileUpload::make('image')
-                ->label('تصویر شاخص')
-                ->image()
-                ->required()
-                ->directory('thumbnails'),
+            // FileUpload::make('image')
+            //     ->label('تصویر شاخص')
+            //     ->image()
+            //     ->required()
+            //     ->directory('thumbnails'),
+
+            Select::make('media_type')
+    ->label('نوع رسانه')
+    ->options([
+        'image' => 'تصویر',
+        'video' => 'ویدیو (فقط آپارات)',
+    ])
+    ->required()
+    ->live()
+    ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
+
+FileUpload::make('image_upload')
+    ->label('آپلود تصویر')
+    ->disk('public')
+    ->directory('news-media')
+    ->preserveFilenames()
+    ->acceptedFileTypes(['image/*'])
+    ->visible(fn (Forms\Get $get) => $get('media_type') === 'image')
+    ->required(fn (Forms\Get $get) => $get('media_type') === 'image')
+    ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
+
+TextInput::make('video_link')
+    ->label('کد یا لینک ویدیو (آپارات)')
+    ->placeholder('مثلاً: x439z63 یا https://www.aparat.com/v/x439z63')
+    ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
+    ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
+    ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
+        if ($state) {
+            // اگر کل لینک باشه
+            if (preg_match('/aparat\.com\/v\/([a-zA-Z0-9]+)/', $state, $matches)) {
+                $set('media_path', $matches[1]);
+            }
+            // اگر فقط کد باشه
+            elseif (preg_match('/^[a-zA-Z0-9]+$/', $state)) {
+                $set('media_path', $state);
+            }
+            else {
+                $set('media_path', null);
+            }
+        } else {
+            $set('media_path', null);
+        }
+    })
+    ->rules(['regex:/^[a-zA-Z0-9]+$|^.*aparat\.com\/v\/[a-zA-Z0-9]+$/']),
+
+TextInput::make('media_path')
+    ->label('کد ویدیو یا مسیر رسانه')
+    ->hidden(),
 
             Select::make('category_id')
                 ->label('دسته‌بندی')
@@ -191,6 +239,7 @@ public static function table(Table $table): Table
                 ->disk('public') // اگر از disk public استفاده می‌کنی
                 ->url(fn ($record) => asset('storage/thumbnails/' . $record->thumbnail)), // مسیر دستی
 
+    
             TextColumn::make('author.display_name')
                 ->label('نویسنده')
                 ->sortable()
@@ -294,4 +343,28 @@ public static function table(Table $table): Table
                 ->icon('heroicon-o-plus-circle'),
         ];
     }
+
+public static function mutateFormDataBeforeSave(array $data): array
+{
+    if (!empty($data['media_type']) && $data['media_type'] === 'image' && isset($data['image_upload'])) {
+        $data['media_path'] = $data['image_upload'];
+    }
+
+    if (!empty($data['media_type']) && $data['media_type'] === 'video' && !empty($data['video_link'])) {
+        // اگر لینک کامل بود
+        if (preg_match('/aparat\.com\/v\/([a-zA-Z0-9]+)/', $data['video_link'], $matches)) {
+            $data['media_path'] = $matches[1];
+        }
+        // اگر فقط کد بود
+        elseif (preg_match('/^[a-zA-Z0-9]+$/', $data['video_link'])) {
+            $data['media_path'] = $data['video_link'];
+        } else {
+            $data['media_path'] = null;
+        }
+    }
+
+    unset($data['image_upload'], $data['video_link']); // اینا لازم نیست تو دیتابیس برن
+
+    return $data;
+}
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             // $table->string('slug')->unique();
             $table->string('subtitle')->nullable();
             $table->string('content_type')->nullable(); // یا بعد از هر ستون دیگری که مدنظرت هست
-            $table->string('image')->nullable();
+            // $table->string('image')->nullable();
             $table->string('short_link')->unique()->nullable();
             $table->unsignedBigInteger('news_code')->unique()->nullable();
             $table->text('body')->nullable();

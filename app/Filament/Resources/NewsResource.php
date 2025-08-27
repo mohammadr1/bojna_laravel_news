@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\NewsResource\RelationManagers;
 use App\Models\Tag;
 use Illuminate\Support\Str;
+use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -79,10 +80,58 @@ public static function form(Form $form): Form
             //     ->unique(ignoreRecord: true)
             //     ->required(),
 
-            TextInput::make('subtitle')
-                ->label('لید')
-                ->maxLength(255)
-                ->required(),
+Select::make('media_type')
+    ->options([
+        'image' => 'تصویر',
+        'video' => 'ویدیو (فقط لینک خارجی)',
+    ])
+    ->required()
+    ->live()
+    ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
+
+FileUpload::make('image_upload')
+    ->label('آپلود تصویر')
+    ->disk('public')
+    ->directory('news')
+    ->preserveFilenames()
+    ->acceptedFileTypes(['image/*'])
+    ->visible(fn (Forms\Get $get) => $get('media_type') === 'image')
+    ->required(fn (Forms\Get $get) => $get('media_type') === 'image')
+    ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
+
+TextInput::make('video_link')
+    ->label('کد یا آخرین قسمت لینک آپارات')
+    ->placeholder('ckv6gqv')
+    ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
+    ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
+    ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
+        if ($state) {
+            $set('media_path', $state);
+        } else {
+            $set('media_path', null);
+        }
+    })
+    ->rules(['regex:/[a-zA-Z0-9]+/']),
+
+FileUpload::make('thumbnailVideo')
+    ->label('تصویر شاخص ویدیو')
+    ->disk('public')
+    ->directory('news/thumbnails')
+    ->preserveFilenames()
+    ->acceptedFileTypes(['image/*'])
+    ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
+    ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
+    ->dehydrated(true), // ✅ ذخیره در دیتابیس
+
+TextInput::make('media_path')
+    ->label('کد ویدیو')
+    ->hidden(),
+
+TextInput::make('subtitle')
+    ->label('لید')
+    ->maxLength(255)
+    ->required(),
+
 
                 Select::make('content_type')
                     ->label('نوع مطلب')
@@ -110,53 +159,43 @@ public static function form(Form $form): Form
             //     ->required()
             //     ->directory('thumbnails'),
 
-            Select::make('media_type')
-    ->label('نوع رسانه')
-    ->options([
-        'image' => 'تصویر',
-        'video' => 'ویدیو (فقط آپارات)',
-    ])
-    ->required()
-    ->live()
-    ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
+        // Select::make('media_type')
+        //     ->options([
+        //         'image' => 'تصویر',
+        //         'video' => 'ویدیو (فقط لینک خارجی)',
+        //     ])
+        //     ->required()
+        //     ->live()
+        //     ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
 
-FileUpload::make('image_upload')
-    ->label('آپلود تصویر')
-    ->disk('public')
-    ->directory('news-media')
-    ->preserveFilenames()
-    ->acceptedFileTypes(['image/*'])
-    ->visible(fn (Forms\Get $get) => $get('media_type') === 'image')
-    ->required(fn (Forms\Get $get) => $get('media_type') === 'image')
-    ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
+        // FileUpload::make('image_upload')
+        //     ->label('آپلود تصویر')
+        //     ->disk('public')
+        //     ->directory('news')
+        //     ->preserveFilenames()
+        //     ->acceptedFileTypes(['image/*'])
+        //     ->visible(fn (Forms\Get $get) => $get('media_type') === 'image')
+        //     ->required(fn (Forms\Get $get) => $get('media_type') === 'image')
+        //     ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
 
-TextInput::make('video_link')
-    ->label('کد یا لینک ویدیو (آپارات)')
-    ->placeholder('مثلاً: x439z63 یا https://www.aparat.com/v/x439z63')
-    ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
-    ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
-    ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
-        if ($state) {
-            // اگر کل لینک باشه
-            if (preg_match('/aparat\.com\/v\/([a-zA-Z0-9]+)/', $state, $matches)) {
-                $set('media_path', $matches[1]);
-            }
-            // اگر فقط کد باشه
-            elseif (preg_match('/^[a-zA-Z0-9]+$/', $state)) {
-                $set('media_path', $state);
-            }
-            else {
-                $set('media_path', null);
-            }
-        } else {
-            $set('media_path', null);
-        }
-    })
-    ->rules(['regex:/^[a-zA-Z0-9]+$|^.*aparat\.com\/v\/[a-zA-Z0-9]+$/']),
-
-TextInput::make('media_path')
-    ->label('کد ویدیو یا مسیر رسانه')
-    ->hidden(),
+        // TextInput::make('video_link')
+        //     ->label('لینک ویدیو (فقط آپارات)')
+        //     ->placeholder('ckv6gqv')
+        //     ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
+        //     ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
+        //     ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
+        //         if ($state && str_contains($state, 'aparat.com')) {
+        //             if (preg_match('/aparat\.com\/v\/([a-zA-Z0-9]+)/', $state, $matches)) {
+        //                 $set('media_path', $matches[1]);
+        //             } else {
+        //                 $set('media_path', null);
+        //             }
+        //         } else {
+        //             $set('media_path', null);
+        //         }
+        //     })
+        // //    ->rules(['starts_with:https://www.aparat.com/v/']) // ❌ حذف یا اصلاح این
+        //     ->rules(['regex:/[a-zA-Z0-9]+/']), // ✅ این می‌تونه جایگزین مناسب‌تری باشه
 
             Select::make('category_id')
                 ->label('دسته‌بندی')
@@ -228,18 +267,31 @@ TextInput::make('media_path')
 }
 
 
+public static function mutateFormDataBeforeSave(array $data): array
+{
+    if (!empty($data['video_link']) && preg_match('/aparat\.com\/v\/([a-zA-Z0-9]+)/', $data['video_link'], $matches)) {
+        $data['media_path'] = $matches[1];
+    } else {
+        $data['media_path'] = null;
+    }
+
+    return $data;
+}
+
+
+
 public static function table(Table $table): Table
 {
     return $table
         ->defaultSort('created_at', 'desc')
         ->columns([
-            ImageColumn::make('image')
-                ->label('تصویر شاخص')
-                ->square()
-                ->disk('public') // اگر از disk public استفاده می‌کنی
-                ->url(fn ($record) => asset('storage/thumbnails/' . $record->thumbnail)), // مسیر دستی
 
-    
+            // ImageColumn::make('image')
+            //     ->label('تصویر شاخص')
+            //     ->square()
+            //     ->disk('public') // اگر از disk public استفاده می‌کنی
+            //     ->url(fn ($record) => asset('storage/thumbnails/' . $record->thumbnail)), // مسیر دستی
+
             TextColumn::make('author.display_name')
                 ->label('نویسنده')
                 ->sortable()
@@ -250,6 +302,18 @@ public static function table(Table $table): Table
                 ->searchable()
                 ->sortable(),
 
+            // TextColumn::make('media_type')->label('نوع رسانه'),
+
+            //     // اگه عکس باشه تصویر بندانگشتی نشون بده
+            //     ImageColumn::make('media_path')
+            //         ->label('رسانه')
+            //         ->visible(fn ($record) => $record->media_type === 'image'),
+
+            //     // اگه ویدیو باشه کدش رو نشون بده
+            //     TextColumn::make('media_path')
+            //         ->label('کد ویدیو آپارات')
+            //         ->visible(fn ($record) => $record->media_type === 'video'),
+        
             // TextColumn::make('category.name')
             //     ->label('دسته‌بندی'),
 
@@ -343,28 +407,4 @@ public static function table(Table $table): Table
                 ->icon('heroicon-o-plus-circle'),
         ];
     }
-
-public static function mutateFormDataBeforeSave(array $data): array
-{
-    if (!empty($data['media_type']) && $data['media_type'] === 'image' && isset($data['image_upload'])) {
-        $data['media_path'] = $data['image_upload'];
-    }
-
-    if (!empty($data['media_type']) && $data['media_type'] === 'video' && !empty($data['video_link'])) {
-        // اگر لینک کامل بود
-        if (preg_match('/aparat\.com\/v\/([a-zA-Z0-9]+)/', $data['video_link'], $matches)) {
-            $data['media_path'] = $matches[1];
-        }
-        // اگر فقط کد بود
-        elseif (preg_match('/^[a-zA-Z0-9]+$/', $data['video_link'])) {
-            $data['media_path'] = $data['video_link'];
-        } else {
-            $data['media_path'] = null;
-        }
-    }
-
-    unset($data['image_upload'], $data['video_link']); // اینا لازم نیست تو دیتابیس برن
-
-    return $data;
-}
 }

@@ -6,10 +6,12 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class News extends Model
 {
     use HasFactory;
+    // SoftDeletes;
 
     protected $fillable = [
         'on_titr',
@@ -17,8 +19,10 @@ class News extends Model
         // 'slug',
         'subtitle',
         'content_type',
-        'image',
+        // 'image',
+        'media_type',
         'media_path',
+        'thumbnailVideo',
         'body',
         'meta_description',
         'author_id',

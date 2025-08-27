@@ -76,7 +76,19 @@
         @foreach ($bottomSliderNews as $news)
         <div class="news-card row align-items-center shadow-sm rounded-3 p-3 mb-4">
             <div class="col-md-4">
-                <img src="{{ asset('storage/' . $news->image) }}" class="img-fluid rounded-3 shadow-sm" alt="{{ $news->title }}">
+                {{-- <img src="{{ asset('storage/' . $news->image) }}" class="img-fluid rounded-3 shadow-sm" alt="{{ $news->title }}"> --}}
+                @if($news->media_type === 'image')
+                    <img src="{{ asset('storage/' . $news->media_path) }}" class="img-fluid rounded-3 shadow-sm" alt="{{ $news->title }}" alt="{{ $news->title }}" />
+                @elseif($news->media_type === 'video')
+                    <img src="{{ asset('storage/' . $news->thumbnailVideo) }}" class="img-fluid rounded-3 shadow-sm" alt="{{ $news->title }}" alt="{{ $news->title }}" />
+                    {{-- <iframe src="https://www.aparat.com/video/video/embed/videohash/{{ $news->media_path }}/vt/frame"
+                            class="img-fluid rounded-3 shadow-sm" width="100" frameborder="0" allowfullscreen></iframe> --}}
+                             {{-- <a href="{{ route('customer.news.show', $news) }}">
+        <img src="https://www.aparat.com/video/video/show/thumbnail/{{ $news->media_path }}.jpg" alt="ویدیو"> --}}
+    {{-- </a> --}}
+
+    
+                @endif
             </div>
             <div class="col-md-8">
                 <a href="{{ route('customer.news.show', $news) }}">

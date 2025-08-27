@@ -25,11 +25,23 @@
             <div class="feedback-box p-0">
                 <div class="feedback-image-wrapper">
                     {{-- <img src="{{ asset('storage/' . $news->image) }}" class="feedback-image" alt="{{ $news->title }}"> --}}
-                    @if($news->content_type === 'video' && $news->video_code)
+                    {{-- @if($news->content_type === 'video' && $news->video_code)
     <iframe src="https://www.aparat.com/video/video/embed/videohash/{{ $news->video_code }}/vt/frame"
         width="100%" height="400" frameborder="0" allowfullscreen></iframe>
 @elseif($news->content_type === 'news' && $news->image)
     <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}">
+@endif --}}
+
+@if($news->media_type === 'image')
+    <img src="{{ asset('storage/' . $news->media_path) }}" class="w-100" alt="{{ $news->title }}" />
+@elseif($news->media_type === 'video')
+    <iframe
+  class="w-full"
+  style="aspect-ratio:16/9;border:0;"
+  src="https://www.aparat.com/video/video/embed/videohash/{{ $news->media_path }}/vt/frame"
+  allowfullscreen
+  title="Aparat video"></iframe>
+
 @endif
                 </div>
                 <div class="container d-flex flex-wrap align-items-center text-muted mt-3 pb-3 small">

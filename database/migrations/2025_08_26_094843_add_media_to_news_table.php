@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('news', function (Blueprint $table) {
+        Schema::table('news', function (Blueprint $table) {
             $table->id();
             $table->string('media_path')->nullable();
             $table->enum('media_type', ['image', 'video'])->nullable();
-            // $table->softDeletes();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

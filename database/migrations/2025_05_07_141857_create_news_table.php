@@ -19,10 +19,14 @@ return new class extends Migration
             // $table->string('slug')->unique();
             $table->string('subtitle')->nullable();
             $table->string('content_type')->nullable(); // یا بعد از هر ستون دیگری که مدنظرت هست
+            $table->string('media_path')->nullable();
+            $table->enum('media_type', ['image', 'video'])->nullable();
+            $table->string('thumbnailVideo', 500)->nullable()->comment('URL تصویر شاخص ویدیو');
             // $table->string('image')->nullable();
             $table->string('short_link')->unique()->nullable();
             $table->unsignedBigInteger('news_code')->unique()->nullable();
             $table->text('body')->nullable();
+            
             $table->string('meta_description')->nullable();
             $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
@@ -31,7 +35,10 @@ return new class extends Migration
             $table->enum('position', ['slider', 'slider_side', 'slider_bottom'])->default('slider_bottom');
             $table->boolean('status')->default(1);
             $table->unsignedBigInteger('views')->default(0);
+            
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

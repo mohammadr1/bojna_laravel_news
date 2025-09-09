@@ -33,7 +33,7 @@
     <div class="feedback-box">
         @if(count($category->news) > 0)
             @foreach ($category->news as $news)
-                <div class="news-card row g-3 align-items-stretch shadow-sm rounded-3 p-3 mb-4 bg-dark text-light hover-card">
+                <div class="news-card row g-3 align-items-stretch shadow-sm rounded-3 p-3 mb-4 text-light hover-card">
                     <div class="col-md-4">
                         <a href="{{ route('customer.news.show', $news) }}">
                             @if($news->media_type === 'image')

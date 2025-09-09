@@ -33,16 +33,19 @@
 @endif --}}
 
 @if($news->media_type === 'image')
-    <img src="{{ asset('storage/' . $news->media_path) }}" class="w-100" alt="{{ $news->title }}" />
+    <img src="{{ asset('storage/' . $news->media_path) }}" 
+         class="w-100" 
+         alt="{{ $news->title }}" />
 @elseif($news->media_type === 'video')
     <iframe
-  class="w-full"
-  style="aspect-ratio:16/9;border:0;"
-  src="https://www.aparat.com/video/video/embed/videohash/{{ $news->media_path }}/vt/frame"
-  allowfullscreen
-  title="Aparat video"></iframe>
-
+        src="https://www.aparat.com/video/video/embed/videohash/{{ $news->media_path }}/vt/frame"
+        frameborder="0"
+        allowfullscreen
+        style="width: 100%; aspect-ratio: 16/9;">
+    </iframe>
 @endif
+
+{{-- @endif --}}
                 </div>
                 <div class="container d-flex flex-wrap align-items-center text-muted mt-3 pb-3 small">
                     <div class="me-4 mb-2">

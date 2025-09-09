@@ -29,39 +29,64 @@
         </section> --}}
 
         {{-- لیست اخبار --}}
-        <section class="feedback-section shadow">
-            <div class="feedback-box">
-                @if(count($category->news) > 0)
-                @foreach ($category->news as $news)
-                <div class="news-card row align-items-center shadow-sm rounded-3 p-3 mb-4 bg-white">
+        <section class="feedback-section py-4">
+    <div class="feedback-box">
+        @if(count($category->news) > 0)
+            @foreach ($category->news as $news)
+                <div class="news-card row g-3 align-items-stretch shadow-sm rounded-3 p-3 mb-4 bg-dark text-light hover-card">
                     <div class="col-md-4">
-                        <img src="{{ asset('storage/' . $news->image) }}" class="img-fluid rounded-3 shadow-sm"
-                            alt="تصویر خبر">
-                    </div>
-                    <div class="col-md-8">
-                        <a href="{{ route('customer.news.show', $news) }}" class="text-decoration-none">
-                            <div class="news-content">
-                                <span class="badge bg-danger mb-2">{{ $news->category->title }}</span>
-                                <h5 class="news-title text-dark">{{ $news->title }}</h5>
-                                <p class="text-black text-justify">
-                                    {{ Str::limit(trim(str_replace('&nbsp;', ' ', strip_tags($news->body))), 150, '[...]') }}
-                                </p>
-                                <div class="news-meta mt-3">
-                                    <span class="news-date text-muted">
-                                        <i class="far fa-calendar me-1"></i>
-                                        {{ jdate($news->published_at)->format('%d %B %Y') }}
-                                    </span>
-                                </div>
-                            </div>
+                        <a href="{{ route('customer.news.show', $news) }}">
+                            @if($news->media_type === 'image')
+                                <img src="{{ asset('storage/' . $news->media_path) }}" 
+                                     class="img-fluid rounded-3 shadow-sm w-100 h-100 object-fit-cover" 
+                                     alt="{{ $news->title }}" />
+                            @elseif($news->media_type === 'video')
+                                <img src="{{ asset('storage/' . $news->thumbnailVideo) }}" 
+                                     class="img-fluid rounded-3 shadow-sm w-100 h-100 object-fit-cover" 
+                                     alt="{{ $news->title }}" />
+                            @endif
                         </a>
                     </div>
+                    <div class="col-md-8 d-flex flex-column justify-content-between">
+                    <div>
+                        <!-- دسته‌بندی به شکل badge -->
+                        <span class="badge bg-danger mb-2">{{ $news->category->title }}</span>
+
+                        <!-- عنوان خبر -->
+                        <h5 class="news-title fw-bold mb-2">
+                            <a href="{{ route('customer.news.show', $news) }}" 
+                            class="text-decoration-none text-white hover-link">
+                                {{ $news->title }}
+                            </a>
+                        </h5>
+
+                        <!-- خلاصه خبر -->
+                        <p class="text-secondary small mb-3" style="line-height: 1.6;">
+                            {{ Str::limit(trim(str_replace('&nbsp;', ' ', strip_tags($news->body))), 150, '...') }}
+                        </p>
+                    </div>
+
+                    <!-- متای خبر (تاریخ + نویسنده) -->
+                    <div class="news-meta mt-3 d-flex align-items-center text-muted small">
+                        <span class="news-date me-3">
+                            <i class="far fa-calendar me-1"></i>
+                            {{ jdate($news->published_at)->format('%d %B %Y') }}
+                        </span>
+                        <span class="news-author">
+                            <i class="far fa-user me-1"></i>
+                            {{ $news->author->display_name ?? 'نامشخص' }}
+                        </span>
+                    </div>
                 </div>
-                @endforeach
-                @else
-                <p>خبری برای دسته‌بندی <span class="text-danger">{{ $category->title }}</span> یافت نشد!</p>
-                @endif
-            </div>
-        </section>
+
+                </div>
+            @endforeach
+        @else
+            <p class="text-light">خبری برای دسته‌بندی <span class="text-danger">{{ $category->title }}</span> یافت نشد!</p>
+        @endif
+    </div>
+</section>
+
     </div>
 
 

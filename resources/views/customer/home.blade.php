@@ -13,8 +13,14 @@
                     @foreach($sliders as $index => $slider)
                     <a href="{{ route('customer.news.show', $slider) }}" aria-label="{{ $slider->title }}">
                         <div class="carousel-item h-100 @if($index === 0) active @endif">
-                            <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100 h-100 object-fit-cover"
-                                alt="{{ $slider->title }}">
+                            {{-- <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100 h-100 object-fit-cover"
+                                alt="{{ $slider->title }}"> --}}
+                            @if($slider->media_type === 'image')
+                                <img src="{{ asset('storage/' . $slider->media_path) }}" class="d-block w-100 h-100" alt="{{ $slider->title }}" alt="{{ $slider->title }}" />
+                            @elseif($slider->media_type === 'video')
+                                <img src="{{ asset('storage/' . $slider->thumbnailVideo) }}" class="d-block w-100 h-100" alt="{{ $slider->title }}" alt="{{ $slider->title }}" />
+                            @endif
+                                    
                             <div class="position-absolute bottom-0 w-100 p-3 slider-caption">
                                 <h5 class="mb-2">{{ $slider->title }}</h5>
                                 @if($slider->publish_date)
@@ -45,7 +51,14 @@
             <div class="news-card d-flex shadow-sm rounded mb-2 p-2">
                 <div class="w-50 pe-2">
                     <a href="{{ route('customer.news.show', $news) }}">
-                        <img src="{{ asset('storage/' . $news->image) }}" class="img-fluid rounded w-100 h-100 object-fit-cover" alt="{{ $news->title }}">
+                        {{-- <img src="{{ asset('storage/' . $news->image) }}" class="img-fluid rounded w-100 h-100 object-fit-cover" alt="{{ $news->title }}"> --}}
+
+                        @if($news->media_type === 'image')
+                            <img src="{{ asset('storage/' . $news->media_path) }}" class="img-fluid rounded-3 shadow-sm" alt="{{ $news->title }}" alt="{{ $news->title }}" />
+                        @elseif($news->media_type === 'video')
+                            <img src="{{ asset('storage/' . $news->thumbnailVideo) }}" class="img-fluid rounded-3 shadow-sm" alt="{{ $news->title }}" alt="{{ $news->title }}" />
+                        @endif
+
                     </a>
                 </div>
                 <div class="w-50 d-flex flex-column justify-content-between overflow-auto">

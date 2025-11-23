@@ -99,19 +99,26 @@ FileUpload::make('image_upload')
     ->required(fn (Forms\Get $get) => $get('media_type') === 'image')
     ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
 
-TextInput::make('video_link')
+// TextInput::make('video_link')
+//     ->label('کد یا آخرین قسمت لینک آپارات')
+//     ->placeholder('ckv6gqv')
+//     ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
+//     ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
+//     ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
+//         if ($state) {
+//             $set('media_path', $state);
+//         } else {
+//             $set('media_path', null);
+//         }
+//     })
+//     ->rules(['regex:/[a-zA-Z0-9]+/']),
+
+TextInput::make('media_path')
     ->label('کد یا آخرین قسمت لینک آپارات')
     ->placeholder('ckv6gqv')
     ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
     ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
-    ->afterStateUpdated(function (Forms\Set $set, ?string $state) {
-        if ($state) {
-            $set('media_path', $state);
-        } else {
-            $set('media_path', null);
-        }
-    })
-    ->rules(['regex:/[a-zA-Z0-9]+/']),
+    ->regex('/^[A-Za-z0-9\-_]+$/'),
 
 FileUpload::make('thumbnailVideo')
     ->label('تصویر شاخص ویدیو')

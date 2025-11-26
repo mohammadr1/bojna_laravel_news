@@ -14,6 +14,12 @@ return [
     |
     */
 
+    'mailgun' => [
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -34,5 +40,12 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    // ************ بخش تلگرام برای پکیج نوتیفیکیشن ************
+    'telegram' => [
+        // این خط متغیر TELEGRAM_BOT_TOKEN را از فایل .env شما می‌خواند
+        'token' => env('TELEGRAM_BOT_TOKEN'), 
+    ],
+    // *********************************************************
 
 ];

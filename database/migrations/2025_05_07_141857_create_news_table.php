@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title')->unique();
             // $table->string('slug')->unique();
             $table->string('subtitle')->nullable();
-            $table->string('content_type')->nullable(); // یا بعد از هر ستون دیگری که مدنظرت هست
+            $table->string('content_type')->nullable();
             $table->string('media_path')->nullable();
             $table->enum('media_type', ['image', 'video'])->nullable();
             $table->string('thumbnailVideo', 500)->nullable()->comment('URL تصویر شاخص ویدیو');

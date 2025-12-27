@@ -239,7 +239,7 @@
                         <h6 class="mb-0 fw-bold">حرف مردم</h6>
                     </div>
 
-                    <p class="message-text">
+                    <p class="text-justify">
                         {{ Str::words($content, 50, ' [...]') }}
                     </p>
 

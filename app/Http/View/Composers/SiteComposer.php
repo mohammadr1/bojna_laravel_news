@@ -32,14 +32,14 @@ class SiteComposer
             ->where('status', 1)
             ->where('published_at', '<=', Carbon::now('Asia/Tehran'))
             ->orderBy('published_at', 'desc')
-            ->paginate(4);
+            ->paginate(4, ['*'], 'SuggestedEditorPage');
 
         $messages = Message::where('status', true)
             ->where('status', 1)
             ->where('published_at', '<=', now())
             ->latest()
-            ->take(2)
-            ->get();
+            // ->take(2)
+            ->paginate(2, ['*'], 'MessagePage');
 
         $setting = SiteSetting::first();
 

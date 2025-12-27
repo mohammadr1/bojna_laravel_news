@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\Customer\NewsController;
 use App\Http\Controllers\Customer\SearchController;
 use App\Http\Controllers\Customer\CategoryController;
+// use App\Http\Controllers\Customer\MessageController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Models\User;
 
@@ -23,6 +24,9 @@ Route::get('/news/{news:title}', [NewsController::class, 'show'])->name('custome
 
 // صفحه تگ خاص
 Route::get('/tags/{tags:name}', [TagController::class, 'show'])->name('customer.news.tags');
+
+
+// Route::get('/messages/show/{message}', [MessageController::class, 'show'])->name('customer.messages.show');
 
 // Route::prefix('admin')->namespace('Admin')->group(function(){
 //     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.home');

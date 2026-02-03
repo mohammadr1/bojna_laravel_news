@@ -13,6 +13,7 @@
 </style> --}}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
+<link rel="stylesheet" href="{{ asset('assets/css/comments-style.css') }}">
 @endsection
 
 @section('content')
@@ -24,37 +25,33 @@
         <section class="feedback-section">
             <div class="feedback-box p-0">
                 <div class="feedback-image-wrapper">
-                    {{-- <img src="{{ asset('storage/' . $news->image) }}" class="feedback-image" alt="{{ $news->title }}"> --}}
+                    {{-- <img src="{{ asset('storage/' . $news->image) }}" class="feedback-image"
+                    alt="{{ $news->title }}"> --}}
                     {{-- @if($news->content_type === 'video' && $news->video_code)
     <iframe src="https://www.aparat.com/video/video/embed/videohash/{{ $news->video_code }}/vt/frame"
-        width="100%" height="400" frameborder="0" allowfullscreen></iframe>
-@elseif($news->content_type === 'news' && $news->image)
-    <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}">
-@endif --}}
+                    width="100%" height="400" frameborder="0" allowfullscreen></iframe>
+                    @elseif($news->content_type === 'news' && $news->image)
+                    <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}">
+                    @endif --}}
 
-@if($news->media_type === 'image')
-    <img src="{{ asset('storage/' . $news->media_path) }}" 
-         class="w-100" 
-         alt="{{ $news->title }}" />
-@elseif($news->media_type === 'video')
-    <iframe
-        src="https://www.aparat.com/video/video/embed/videohash/{{ $news->media_path }}/vt/frame"
-        frameborder="0"
-        allowfullscreen
-        style="width: 100%; aspect-ratio: 16/9;">
-    </iframe>
-@endif
+                    @if($news->media_type === 'image')
+                    <img src="{{ asset('storage/' . $news->media_path) }}" class="w-100" alt="{{ $news->title }}" />
+                    @elseif($news->media_type === 'video')
+                    <iframe src="https://www.aparat.com/video/video/embed/videohash/{{ $news->media_path }}/vt/frame"
+                        frameborder="0" allowfullscreen style="width: 100%; aspect-ratio: 16/9;">
+                    </iframe>
+                    @endif
 
-{{-- @endif --}}
+                    {{-- @endif --}}
                 </div>
                 <div class="container d-flex flex-wrap align-items-center text-muted mt-3 pb-3 small">
                     <div class="me-4 mb-2">
                         <i class="far fa-calendar me-1"></i>
                         <span>{{ jdate($news->published_at)->format('%d %B %Y') }}</span>
                         {{-- خروجی مثال: ۱۵ مرداد ۱۴۰۲ --}}
-                    <span class="news-author text-muted ms-3">
-                                <i class="far fa-user me-1"></i> {{ $news->author->display_name ?? 'نامشخص' }}
-                            </span>
+                        <span class="news-author text-muted ms-3">
+                            <i class="far fa-user me-1"></i> {{ $news->author->display_name ?? 'نامشخص' }}
+                        </span>
                     </div>
                     {{-- <div class="mb-2">
                         <i class="far fa-eye me-1"></i>
@@ -93,15 +90,15 @@
 
                 <div>
                     <h5>لینک کوتاه خبر</h3>
-                    <section class="">
-                        <small id="copyMessage" style="margin-left: 10px; color: green; display: none;">کپی شد
-                            ✅</small>
-                        <span id="shortLinkText"
-                            style="color: #007bff; cursor: pointer; direction: ltr; float: left;"
-                            onclick="copyShortLink()">
-                            {{ $shortUrl }}
-                        </span>
-                    </section>
+                        <section class="">
+                            <small id="copyMessage" style="margin-left: 10px; color: green; display: none;">کپی شد
+                                ✅</small>
+                            <span id="shortLinkText"
+                                style="color: #007bff; cursor: pointer; direction: ltr; float: left;"
+                                onclick="copyShortLink()">
+                                {{ $shortUrl }}
+                            </span>
+                        </section>
                 </div>
             </div>
         </section>
@@ -142,6 +139,135 @@
         </section>
 
 
+        <!-- بخش نظرات -->
+        <section class="comments-section feedback-section rounded bg-white mt-3">
+            {{-- <div class="comments-header">
+                <h2><i class="fas fa-comments"></i> نظرات (<span id="comments-count">۴</span>)</h2>
+                <div class="comments-sort">
+                    <select id="sort-comments">
+                        <option value="newest">جدیدترین</option>
+                        <option value="oldest">قدیمی‌ترین</option>
+                        <option value="most-liked">محبوب‌ترین</option>
+                    </select>
+                </div>
+            </div> --}}
+
+            <!-- فرم ارسال نظر -->
+            <div class="comment-form-container" id="comment-form">
+                <div class="form-header">
+                    <h3><i class="fas fa-edit"></i> <span id="form-title">نظر جدید</span></h3>
+                    <div id="reply-info" class="reply-info" style="display: none;">
+                        <span>در حال پاسخ به نظر <strong id="reply-to-name"></strong></span>
+                        <button type="button" id="cancel-reply" class="btn-cancel">
+                            <i class="fas fa-times"></i> لغو
+                        </button>
+                    </div>
+                </div>
+
+
+                <form method="POST" action="{{ route('customer.comments') }}" id="commentForm" class="comment-form">
+                    @csrf
+
+                    <input type="hidden" name="news_id" value="{{ $news->id }}">
+                    <input type="hidden" name="parent_id" id="parent_id">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="author">نام شما *</label>
+                            <input type="text" id="author" name="author" placeholder="نام و نام خانوادگی" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">ایمیل (اختیاری)</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment">متن نظر *</label>
+                        <textarea id="comment" name="content" placeholder="نظر خود را بنویسید..." rows="4"
+                            required></textarea>
+                        <div class="char-counter">
+                            <span id="char-count">0</span> / 500 کاراکتر
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <div class="form-note">
+                            <i class="fas fa-info-circle"></i>
+                            نظرات پس از تأیید مدیر نمایش داده می‌شوند
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-paper-plane"></i>
+                            <span id="submit-text">ارسال نظر</span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- لیست نظرات -->
+            <div class="comments-list" id="comments-list">
+
+
+                @if ($news->comments->isEmpty())
+                <p class="no-comments">اولین نفری باشید که نظر خود را ثبت می‌کند.</p>
+                @endif
+
+                @foreach ($news->comments as $index => $comment)
+    <div class="comment" data-id="{{ $comment->id }}">
+        <div class="comment-header">
+            <div class="user-info">
+                <div class="avatar">
+                    {{ mb_substr($comment->author, 0, 1) }}
+                </div>
+                <div class="user-details">
+                    <span class="username">{{ $comment->author }}</span>
+                    <span class="user-badge">کاربر</span>
+                    <span class="comment-date">
+                        {{ $comment->created_at->format('Y/m/d - H:i') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="comment-actions">
+                <span class="comment-id">#{{ $index + 1 }}</span>
+            </div>
+        </div>
+
+        <div class="comment-content">
+            <p>{{ $comment->content }}</p>
+        </div>
+
+        @if ($comment->admin_content)
+        <div class="replies">
+            {{-- @foreach ($comment->replies as $reply) --}}
+            <div class="comment reply">
+                <div class="comment-header">
+                    <div class="user-info">
+                        <div class="avatar small">
+                            {{ mb_substr($comment->author, 0, 1) }}
+                        </div>
+                        <div class="user-details">
+                            <span class="username">مدیر سایت</span>
+                            <span class="user-badge comment-badge">
+                                {{ $comment->is_admin ? 'پاسخ مسئول' : 'پاسخ' }}
+                            </span>
+                        </div>
+                    </div>
+            </div>
+                
+            <div class="comment-content W-100">
+                <p>{{ $comment->admin_content }}</p>
+            </div>
+            {{-- @endforeach --}}
+        </div>
+        @endif
+    </div>
+@endforeach
+
+            </div>
+
+
 
     </div>
 
@@ -153,5 +279,13 @@
 
 
     @section('scripts')
+<script>
+    document.querySelectorAll('.btn-reply').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.getElementById('parent_id').value = btn.dataset.id;
+        document.getElementById('form-title').innerText = 'پاسخ به ' + btn.dataset.author;
+    });
+});
 
+</script>
     @endsection

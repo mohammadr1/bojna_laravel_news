@@ -151,4 +151,27 @@ class News extends Model
 
         return $id;
     }
+
+    // public function comments()
+    // {
+    //     return $this->morphMany(Comment::class, 'commentable')
+    //         ->whereNull('parent_id')
+    //         ->latest();
+    // }
+    public function comments()
+    {
+        // return $this->morphMany(Comment::class, 'commentable')
+        //     ->whereNull('parent_id')
+        //     ->where('approved', true)
+        //     ->with(['replies' => function ($q) {
+        //         $q->where('approved', true);
+        //     }])
+        //     ->latest();
+
+        return $this->morphMany(Comment::class, 'commentable')
+            ->whereNull('parent_id')
+            ->approved()
+            // ->with('replies')
+            ->latest();
+    }
 }

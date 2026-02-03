@@ -4,6 +4,7 @@ use App\Models\News;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Customer\TagController;
 use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\Customer\NewsController;
@@ -46,6 +47,8 @@ Route::get('/s/{code}', function ($code) {
     return redirect()->route('customer.news.show', $news);
 })->name('short.redirect');
 
+
+Route::post('/comments', [CommentController::class, 'store'])->name('customer.comments');
 
 // use Illuminate\Support\Facades\Gate;
 // Route::get('/test', function () {

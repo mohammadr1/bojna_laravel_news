@@ -15,7 +15,8 @@ class NewsController extends Controller
     public function show(News $news)
     {
         // $news->load('tags');
-        $news->load('tags', 'category');
+        $comments = $news->comments;
+        $news->load('tags', 'category', 'comments');
 
         $categories = Category::where('status', 1)->withCount('news')->get();
 

@@ -22,6 +22,8 @@ use Filament\Navigation\NavigationItem;
 use Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\NewsResource;
 
+use App\Filament\Pages\EditProfile;
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -34,6 +36,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->profile(EditProfile::class)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

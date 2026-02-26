@@ -164,7 +164,7 @@
                 @endif
 
                 {{-- صفحات اطراف صفحه فعلی --}}
-                @for ($i = max(1, $current - 2); $i <= min($last, $current + 2); $i++)
+                @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++)
                     <li class="{{ $i == $current ? 'active' : '' }}">
                         <a href="{{ $bottomSliderNews->url($i) }}">{{ $i }}</a>
                     </li>
@@ -331,7 +331,7 @@
                     @endif
 
                     {{-- صفحات اطراف صفحه فعلی --}}
-                    @for ($i = max(1, $current - 2); $i <= min($last, $current + 2); $i++)
+                    @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++)
                         <li class="{{ $i == $current ? 'active' : '' }}">
                             <a href="{{ $messages->url($i) }}">{{ $i }}</a>
                         </li>

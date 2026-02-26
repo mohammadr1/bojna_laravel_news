@@ -137,31 +137,59 @@
             </div>
         </div>
         @endforeach
+        @if ($bottomSliderNews->lastPage() > 1)
         <div class="custom-pagination-container">
-            @if ($bottomSliderNews->lastPage() > 1)
             <ul class="custom-pagination">
+
                 {{-- دکمه قبلی --}}
-                <li class="{{ ($bottomSliderNews->currentPage() == 1) ? 'disabled' : '' }}">
-                    <a href="{{ $bottomSliderNews->url($bottomSliderNews->currentPage() - 1) }}" aria-label="قبلی"
-                        rel="prev">&laquo;</a>
+                <li class="{{ $bottomSliderNews->onFirstPage() ? 'disabled' : '' }}">
+                    <a href="{{ $bottomSliderNews->previousPageUrl() ?? '#' }}" rel="prev">&laquo;</a>
                 </li>
 
-                {{-- شماره صفحات --}}
-                @for ($page = 1; $page <= $bottomSliderNews->lastPage(); $page++)
-                    <li class="{{ ($bottomSliderNews->currentPage() == $page) ? 'active' : '' }}">
-                        <a href="{{ $bottomSliderNews->url($page) }}">{{ $page }}</a>
-                    </li>
-                    @endfor
+                @php
+                    $current = $bottomSliderNews->currentPage();
+                    $last = $bottomSliderNews->lastPage();
+                @endphp
 
-                    {{-- دکمه بعدی --}}
-                    <li
-                        class="{{ ($bottomSliderNews->currentPage() == $bottomSliderNews->lastPage()) ? 'disabled' : '' }}">
-                        <a href="{{ $bottomSliderNews->url($bottomSliderNews->currentPage() + 1) }}" aria-label="بعدی"
-                            rel="next">&raquo;</a>
+                {{-- صفحه اول --}}
+                @if ($current > 3)
+                    <li>
+                        <a href="{{ $bottomSliderNews->url(1) }}">1</a>
                     </li>
+                @endif
+
+                {{-- سه نقطه قبل --}}
+                @if ($current > 4)
+                    <li class="disabled"><span>...</span></li>
+                @endif
+
+                {{-- صفحات اطراف صفحه فعلی --}}
+                @for ($i = max(1, $current - 2); $i <= min($last, $current + 2); $i++)
+                    <li class="{{ $i == $current ? 'active' : '' }}">
+                        <a href="{{ $bottomSliderNews->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endfor
+
+                {{-- سه نقطه بعد --}}
+                @if ($current < $last - 3)
+                    <li class="disabled"><span>...</span></li>
+                @endif
+
+                {{-- صفحه آخر --}}
+                @if ($current < $last - 2)
+                    <li>
+                        <a href="{{ $bottomSliderNews->url($last) }}">{{ $last }}</a>
+                    </li>
+                @endif
+
+                {{-- دکمه بعدی --}}
+                <li class="{{ !$bottomSliderNews->hasMorePages() ? 'disabled' : '' }}">
+                    <a href="{{ $bottomSliderNews->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
+                </li>
+
             </ul>
-            @endif
         </div>
+        @endif
 
         <style>
             .custom-pagination-container {
@@ -276,25 +304,59 @@
             @endforeach
 
             {{-- pagination --}}
+            @if ($messages->lastPage() > 1)
             <div class="custom-pagination-container">
-                @if ($messages->lastPage() > 1)
                 <ul class="custom-pagination">
+
+                    {{-- دکمه قبلی --}}
                     <li class="{{ $messages->onFirstPage() ? 'disabled' : '' }}">
-                        <a href="{{ $messages->previousPageUrl() }}">&laquo;</a>
+                        <a href="{{ $messages->previousPageUrl() ?? '#' }}" rel="prev">&laquo;</a>
                     </li>
 
-                    @for ($i = 1; $i <= $messages->lastPage(); $i++)
-                        <li class="{{ $messages->currentPage() == $i ? 'active' : '' }}">
+                    @php
+                        $current = $messages->currentPage();
+                        $last = $messages->lastPage();
+                    @endphp
+
+                    {{-- صفحه اول --}}
+                    @if ($current > 3)
+                        <li>
+                            <a href="{{ $messages->url(1) }}">1</a>
+                        </li>
+                    @endif
+
+                    {{-- سه نقطه قبل --}}
+                    @if ($current > 4)
+                        <li class="disabled"><span>...</span></li>
+                    @endif
+
+                    {{-- صفحات اطراف صفحه فعلی --}}
+                    @for ($i = max(1, $current - 2); $i <= min($last, $current + 2); $i++)
+                        <li class="{{ $i == $current ? 'active' : '' }}">
                             <a href="{{ $messages->url($i) }}">{{ $i }}</a>
                         </li>
-                        @endfor
+                    @endfor
 
-                        <li class="{{ $messages->currentPage() == $messages->lastPage() ? 'disabled' : '' }}">
-                            <a href="{{ $messages->nextPageUrl() }}">&raquo;</a>
+                    {{-- سه نقطه بعد --}}
+                    @if ($current < $last - 3)
+                        <li class="disabled"><span>...</span></li>
+                    @endif
+
+                    {{-- صفحه آخر --}}
+                    @if ($current < $last - 2)
+                        <li>
+                            <a href="{{ $messages->url($last) }}">{{ $last }}</a>
                         </li>
+                    @endif
+
+                    {{-- دکمه بعدی --}}
+                    <li class="{{ !$messages->hasMorePages() ? 'disabled' : '' }}">
+                        <a href="{{ $messages->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
+                    </li>
+
                 </ul>
-                @endif
             </div>
+            @endif
 
         </section>
     </div>

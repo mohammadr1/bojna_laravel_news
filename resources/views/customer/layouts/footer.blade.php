@@ -42,9 +42,7 @@
         <div class="col-md-2 mb-3">
         <h5 class="font-vazir-bold">مجوزها</h5>
         <div>
-            <a href="#" target="_blank">
-            <img src="{{ asset('assets/img/mojavez.jpg') }}" width="100" />
-            </a>
+            
         </div>
     </div>
 </div>

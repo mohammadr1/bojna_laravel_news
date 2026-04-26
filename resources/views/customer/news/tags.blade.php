@@ -5,6 +5,9 @@
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="description" content="جدیدترین و مهم‌ترین اخبار مربوط به تگ {{ $tag->name }} را در این صفحه مطالعه کنید. پوشش کامل خبرهای {{ $tag->name }}، تحلیل‌ها و گزارش‌های ویژه." />
+
 {{-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <style type="text/tailwindcss">
     @theme {
@@ -12,6 +15,10 @@
       }
 </style> --}}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
+<title>جدیدترین اخبار {{ $newsList[0]->tags[0]->name }} در {{ env('APP_NAME') }}</title>
+
 
 @endsection
 

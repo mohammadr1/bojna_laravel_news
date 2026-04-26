@@ -13,6 +13,8 @@
 </style> --}}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
+
+<title>{{ env('APP_NAME') }} - دسته بندی - {{ $category->title }} </title>
 @endsection
 
 @section('content')

@@ -19,6 +19,7 @@ class SiteComposer
             ->where('status', 1)
             ->where('published_at', '<=', Carbon::now('Asia/Tehran'))
             ->orderBy('published_at', 'desc')
+            ->take(1)
             ->get();
 
         $leftSliderNews = News::where('position', 'slider_side')
@@ -28,8 +29,8 @@ class SiteComposer
             ->take(2)
             ->get();
 
-        $bottomSliderNews = News::where('position', 'slider_bottom')
-            ->where('status', 1)
+        // $bottomSliderNews = News::where('position', 'slider_bottom')
+        $bottomSliderNews = News::where('status', 1)
             ->where('published_at', '<=', Carbon::now('Asia/Tehran'))
             ->orderBy('published_at', 'desc')
             ->paginate(4, ['*'], 'SuggestedEditorPage');

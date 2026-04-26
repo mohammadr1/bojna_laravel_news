@@ -4,12 +4,15 @@
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
 <meta name="generator" content="Hugo 0.145.0">
 
+{{-- <title>{{ env('APP_NAME') }}</title> --}}
 
     <!-- Bootstrap RTL CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.rtl.min.css" integrity="sha384-MdqCcafa5BLgxBDJ3d/4D292geNL64JyRtSGjEszRUQX9rhL1QkcnId+OT7Yw+D+" crossorigin="anonymous">
+        {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.rtl.min.css" integrity="sha384-MdqCcafa5BLgxBDJ3d/4D292geNL64JyRtSGjEszRUQX9rhL1QkcnId+OT7Yw+D+" crossorigin="anonymous"> --}}
 
-{{-- <link href="{{ asset('assets/css/bootstrap.rtl.min.css') }}" rel="stylesheet" integrity="sha384-..."> --}}
+{{-- <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/carousel.rtl.css') }}" rel="stylesheet"> --}}
 {{-- <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
+<link href="{{ asset('assets/css/bootstrap.rtl.min.css') }}" rel="stylesheet">
 {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 {{-- <link rel="stylesheet" href="{{ asset('assets/css/scroll-top.css') }}"> --}}
@@ -28,6 +31,7 @@
 
 <!-- Your custom CSS -->
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/style-show.css') }}">
 
 <!-- css font awesome -->
 <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}" integrity="sha384-...">  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel-rtl/">

@@ -6,6 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{ env('APP_NAME') }} - {{ $news->title }}</title>
 @endsection
 
 @section('content')
@@ -32,7 +33,7 @@
                         {{-- اطلاعات خبر --}}
                         <div class="px-3 mb-3 d-flex flex-wrap align-items-center text-muted small">
                             <div class="me-3 mb-2 d-flex align-items-center">
-                                <i class="far fa-calendar me-1"></i> {{ jdate($news->published_at)->format('%d %B %Y') }}
+                                <i class="far fa-calendar me-1"></i> {{ jdate($news->published_at)->format('%d %B %Y H:i') }}
                                 <span class="ms-3"><i class="far fa-user me-1"></i> {{ $news->author->display_name ?? 'نامشخص' }}</span>
                             </div>
                         </div>

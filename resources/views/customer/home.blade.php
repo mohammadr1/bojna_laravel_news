@@ -2,6 +2,8 @@
 
 @section('head-tag')
 
+<link rel="stylesheet" href="{{ asset('assets/css/style_slider_home.css') }}">
+<title>{{ env('APP_NAME') }}</title>
 @endsection
 
 @section('content')
@@ -25,15 +27,31 @@
                                 alt="{{ $slider->title }}" alt="{{ $slider->title }}" />
                             @endif
 
-                            <div class="position-absolute bottom-0 w-100 p-3 slider-caption">
-                                <h5 class="mb-2">{{ $slider->title }}</h5>
-                                @if($slider->publish_date)
-                                <p class="mb-1">{{ jdate($slider->publish_date)->format('j F Y') }}</p>
-                                @endif
-                                @if($slider->subtitle)
-                                <p class="mb-0">{{ $slider->subtitle }}</p>
-                                @endif
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3 slider-caption-modern">
+                                <div class="d-flex align-items-end justify-content-between w-100">
+                                    {{-- بخش عنوان و زیرعنوان --}}
+                                    <div class="slider-content-left me-3">
+                                        <h5 class="slider-title mb-2">{{ $slider->title }}</h5>
+                                        @if($slider->subtitle)
+                                        <p class="slider-subtitle mb-0">{{ $slider->subtitle }}</p>
+                                        @endif
+                                    </div>
+
+                                    {{-- بخش تاریخ و ساعت --}}
+                                    <div class="slider-meta-right flex-shrink-0">
+                                        @if($slider->published_at)
+                                        <span class="d-block text-nowrap">
+                                            {{ jdate($slider->published_at)->format('Y/m/d') }}
+                                        </span>
+                                        <span class="d-block text-center">
+                                            {{ jdate($slider->published_at)->format('H:i') }}
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
+
+
                         </div>
                     </a>
                     @endforeach
@@ -76,7 +94,7 @@
                         </h6>
                         <div class="news-meta small text-muted">
                             <span><i
-                                    class="far fa-clock me-1"></i>{{ jdate($news->published_at)->format('Y/m/d') }}</span><br>
+                                    class="far fa-clock me-1"></i>{{ jdate($news->published_at)->format('Y/m/d H:i') }}</span><br>
                             <span><i class="far fa-user me-1"></i>{{ $news->author->name ?? 'نامشخص' }}</span>
                         </div>
                     </div>
@@ -126,7 +144,7 @@
                         </p>
                         <div class="news-meta mt-3">
                             <span class="news-date text-muted">
-                                <i class="far fa-clock me-1"></i> {{ jdate($news->published_at)->format('Y/m/d') }}
+                                <i class="far fa-clock me-1"></i> {{ jdate($news->published_at)->format('Y/m/d H:i') }}
                             </span>
                             <span class="news-author text-muted ms-3">
                                 <i class="far fa-user me-1"></i> {{ $news->author->display_name ?? 'نامشخص' }}
@@ -147,45 +165,43 @@
                 </li>
 
                 @php
-                    $current = $bottomSliderNews->currentPage();
-                    $last = $bottomSliderNews->lastPage();
+                $current = $bottomSliderNews->currentPage();
+                $last = $bottomSliderNews->lastPage();
                 @endphp
 
                 {{-- صفحه اول --}}
                 @if ($current > 3)
-                    <li>
-                        <a href="{{ $bottomSliderNews->url(1) }}">1</a>
-                    </li>
+                <li>
+                    <a href="{{ $bottomSliderNews->url(1) }}">1</a>
+                </li>
                 @endif
 
                 {{-- سه نقطه قبل --}}
                 @if ($current > 4)
-                    <li class="disabled"><span>...</span></li>
+                <li class="disabled"><span>...</span></li>
                 @endif
 
                 {{-- صفحات اطراف صفحه فعلی --}}
-                @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++)
-                    <li class="{{ $i == $current ? 'active' : '' }}">
-                        <a href="{{ $bottomSliderNews->url($i) }}">{{ $i }}</a>
+                @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++) <li
+                    class="{{ $i == $current ? 'active' : '' }}">
+                    <a href="{{ $bottomSliderNews->url($i) }}">{{ $i }}</a>
                     </li>
-                @endfor
+                    @endfor
 
-                {{-- سه نقطه بعد --}}
-                @if ($current < $last - 3)
-                    <li class="disabled"><span>...</span></li>
-                @endif
+                    {{-- سه نقطه بعد --}}
+                    @if ($current < $last - 3) <li class="disabled"><span>...</span></li>
+                        @endif
 
-                {{-- صفحه آخر --}}
-                @if ($current < $last - 2)
-                    <li>
-                        <a href="{{ $bottomSliderNews->url($last) }}">{{ $last }}</a>
-                    </li>
-                @endif
+                        {{-- صفحه آخر --}}
+                        @if ($current < $last - 2) <li>
+                            <a href="{{ $bottomSliderNews->url($last) }}">{{ $last }}</a>
+                            </li>
+                            @endif
 
-                {{-- دکمه بعدی --}}
-                <li class="{{ !$bottomSliderNews->hasMorePages() ? 'disabled' : '' }}">
-                    <a href="{{ $bottomSliderNews->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
-                </li>
+                            {{-- دکمه بعدی --}}
+                            <li class="{{ !$bottomSliderNews->hasMorePages() ? 'disabled' : '' }}">
+                                <a href="{{ $bottomSliderNews->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
+                            </li>
 
             </ul>
         </div>
@@ -295,7 +311,7 @@
                     </p>
                     @else
                     <span class="text-muted small">
-                       در انتظار پاسخ ...
+                        در انتظار پاسخ ...
                     </span>
                     @endif
                 </div>
@@ -314,45 +330,43 @@
                     </li>
 
                     @php
-                        $current = $messages->currentPage();
-                        $last = $messages->lastPage();
+                    $current = $messages->currentPage();
+                    $last = $messages->lastPage();
                     @endphp
 
                     {{-- صفحه اول --}}
                     @if ($current > 3)
-                        <li>
-                            <a href="{{ $messages->url(1) }}">1</a>
-                        </li>
+                    <li>
+                        <a href="{{ $messages->url(1) }}">1</a>
+                    </li>
                     @endif
 
                     {{-- سه نقطه قبل --}}
                     @if ($current > 4)
-                        <li class="disabled"><span>...</span></li>
+                    <li class="disabled"><span>...</span></li>
                     @endif
 
                     {{-- صفحات اطراف صفحه فعلی --}}
-                    @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++)
-                        <li class="{{ $i == $current ? 'active' : '' }}">
-                            <a href="{{ $messages->url($i) }}">{{ $i }}</a>
+                    @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++) <li
+                        class="{{ $i == $current ? 'active' : '' }}">
+                        <a href="{{ $messages->url($i) }}">{{ $i }}</a>
                         </li>
-                    @endfor
+                        @endfor
 
-                    {{-- سه نقطه بعد --}}
-                    @if ($current < $last - 3)
-                        <li class="disabled"><span>...</span></li>
-                    @endif
+                        {{-- سه نقطه بعد --}}
+                        @if ($current < $last - 3) <li class="disabled"><span>...</span></li>
+                            @endif
 
-                    {{-- صفحه آخر --}}
-                    @if ($current < $last - 2)
-                        <li>
-                            <a href="{{ $messages->url($last) }}">{{ $last }}</a>
-                        </li>
-                    @endif
+                            {{-- صفحه آخر --}}
+                            @if ($current < $last - 2) <li>
+                                <a href="{{ $messages->url($last) }}">{{ $last }}</a>
+                                </li>
+                                @endif
 
-                    {{-- دکمه بعدی --}}
-                    <li class="{{ !$messages->hasMorePages() ? 'disabled' : '' }}">
-                        <a href="{{ $messages->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
-                    </li>
+                                {{-- دکمه بعدی --}}
+                                <li class="{{ !$messages->hasMorePages() ? 'disabled' : '' }}">
+                                    <a href="{{ $messages->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
+                                </li>
 
                 </ul>
             </div>
@@ -364,41 +378,40 @@
 </div>
 
 <style>
-   .message-text {
-    background: #f8f9fa;
-    border-right: 4px solid #dc3545;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    line-height: 1.8;
-}
+    .message-text {
+        background: #f8f9fa;
+        border-right: 4px solid #dc3545;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        line-height: 1.8;
+    }
 
-.response-text {
-    background: #f1f8f4;
-    border-right: 4px solid #198754;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    line-height: 1.8;
-}
+    .response-text {
+        background: #f1f8f4;
+        border-right: 4px solid #198754;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        line-height: 1.8;
+    }
 
-.response-full-text {
-    background: #f1f8f4;
-    border-right: 4px solid #ffbb00;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    line-height: 1.8;
-}
+    .response-full-text {
+        background: #f1f8f4;
+        border-right: 4px solid #ffbb00;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        line-height: 1.8;
+    }
 
-.feedback-box {
-    transition: all 0.2s ease;
-}
+    .feedback-box {
+        transition: all 0.2s ease;
+    }
 
-.feedback-box:hover {
-    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-}
-
+    .feedback-box:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
 
 </style>
 <section class="media-section mt-4">

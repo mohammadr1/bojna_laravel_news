@@ -39,7 +39,7 @@ class CreateNews extends CreateRecord
         if ($news->position == 'slider') {
             $sliders = News::where('position', 'slider')
                            ->orderBy('created_at', 'desc')
-                           ->skip(5)->take(PHP_INT_MAX) // از خبر ششم به بعد
+                           ->skip(1)->take(PHP_INT_MAX) // از خبر ششم به بعد
                            ->get();
 
             foreach ($sliders as $slider) {

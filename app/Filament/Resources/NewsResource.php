@@ -90,11 +90,11 @@ Select::make('media_type')
     ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
 
 FileUpload::make('image_upload')
-    ->label('آپلود تصویر')
+    ->label('آپلود تصویر (jpg, jpeg)')
     ->disk('public')
     ->directory('news')
     ->preserveFilenames()
-    ->acceptedFileTypes(['image/*'])
+    ->acceptedFileTypes(['image/jpeg', 'image/jpg']) // فقط فرمت‌های مجاز
     ->visible(fn (Forms\Get $get) => $get('media_type') === 'image')
     ->required(fn (Forms\Get $get) => $get('media_type') === 'image')
     ->disabled(fn ($livewire) => $livewire instanceof EditRecord),
@@ -121,11 +121,11 @@ TextInput::make('media_path')
     ->regex('/^[A-Za-z0-9\-_]+$/'),
 
 FileUpload::make('thumbnailVideo')
-    ->label('تصویر شاخص ویدیو')
+    ->label('تصویر شاخص ویدیو (jpg, jpeg)')
     ->disk('public')
     ->directory('news/thumbnails')
     ->preserveFilenames()
-    ->acceptedFileTypes(['image/*'])
+    ->acceptedFileTypes(['image/jpeg', 'image/jpg']) // فقط فرمت‌های مجاز
     ->visible(fn (Forms\Get $get) => $get('media_type') === 'video')
     ->required(fn (Forms\Get $get) => $get('media_type') === 'video')
     ->dehydrated(true), // ✅ ذخیره در دیتابیس
@@ -262,7 +262,7 @@ TextInput::make('subtitle')
                         'slider' => 'اسلایدر',
                     ])
                     ->required()
-                    ->default('slider_bottom'),
+                    ->default('slider'),
 
 
                 Hidden::make('author_id')

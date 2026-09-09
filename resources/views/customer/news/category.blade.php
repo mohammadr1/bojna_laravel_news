@@ -33,8 +33,8 @@
         {{-- لیست اخبار --}}
         <section class="feedback-section py-4">
     <div class="feedback-box">
-        @if(count($category->news) > 0)
-            @foreach ($category->news as $news)
+        @if(count($news_category) > 0)
+            @foreach ($news_category as $news)
                 <div class="news-card row g-3 align-items-stretch shadow-sm rounded-3 p-3 mb-4 text-light hover-card">
                     <div class="col-md-4">
                         <a href="{{ route('customer.news.show', $news) }}">
@@ -57,7 +57,7 @@
                         <!-- عنوان خبر -->
                         <h5 class="news-title fw-bold mb-2">
                             <a href="{{ route('customer.news.show', $news) }}" 
-                            class="text-decoration-none text-white hover-link">
+                            class="text-decoration-none hover-link">
                                 {{ $news->title }}
                             </a>
                         </h5>

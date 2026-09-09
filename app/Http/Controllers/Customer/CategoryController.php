@@ -11,11 +11,16 @@ class CategoryController extends Controller
     
     public function show(Category $category)
     {
-        // $categories = Category::where('status', 1)->withCount('category')->get();
+        $news_category = $category->news()
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->get();
 
+    //   dd($news_category[0]);
+    //   $categories = Category::where('status', 1)->withCount('news')->get();
         
 
-        return view('customer.news.category', compact('category'));
+        return view('customer.news.category', compact('category', 'news_category'));
     }
 
 

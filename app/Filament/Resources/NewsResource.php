@@ -257,8 +257,8 @@ TextInput::make('subtitle')
                     Select::make('position')
                     ->label('موقعیت قرارگیری خبر در سایت')
                     ->options([
-                        'slider_bottom' => 'پیشنهاد سر دبیر',
-                        'slider_side' => 'سمت چپ اسلایدر',
+                        'slider_bottom' => 'آخرین اخبار',
+                        'slider_side' => 'پیشنهاد سر دبیر',
                         'slider' => 'اسلایدر',
                     ])
                     ->required()
@@ -347,14 +347,14 @@ public static function table(Table $table): Table
                 ->label('موقعیت')
                 ->colors([
                     'slider' => 'اسلایدر',
-                    'slider_side' => 'خبر کنار اسلایدر',
-                    'slider_bottom' => 'خبر پایین اسلایدر',
+                    'slider_side' => 'پیشنهاد سردبیر',
+                    'slider_bottom' => 'آخرین اخبار',
                 ])
                 ->formatStateUsing(function ($state) {
                     return match ($state) {
                         'slider' => 'اسلایدر',
-                    'slider_side' => 'خبر کنار اسلایدر',
-                    'slider_bottom' => 'خبر پایین اسلایدر',
+                    'slider_side' => 'پیشنهاد سردبیر',
+                    'slider_bottom' => 'آخرین اخبار',
                         default => 'نامشخص',
                     };
                 }),

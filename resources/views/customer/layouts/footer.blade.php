@@ -42,7 +42,12 @@
         <div class="col-md-2 mb-3">
         <h5 class="font-vazir-bold">مجوزها</h5>
         <div>
-            
+            @if (filled($setting->mojavez))
+                <a href="https://e-rasaneh.ir/Certificate/{{ urlencode($setting->mojavez) }}"
+                target="_blank" rel="noopener noreferrer">
+                    <img src="{{ asset('assets/img/mojavez.jpg') }}" alt="مجوز رسانه‌ی الکترونیک" loading="lazy">
+                </a>
+            @endif
         </div>
     </div>
 </div>

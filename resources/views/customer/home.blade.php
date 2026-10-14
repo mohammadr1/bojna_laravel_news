@@ -111,7 +111,7 @@
 
 <div class="row mt-3">
     <div class="latest-news col-md-8 rounded">
-        <h3 class="mb-4 pt-4 pe-4"><i class="fas fa-newspaper me-2"></i>پیشنهاد سردبیر</h3>
+        <h3 class="mb-4 pt-4 pe-4"><i class="fas fa-newspaper me-2"></i>آخرین اخبار</h3>
         {{-- {{ dd($bottomSliderNews->links()) }} --}}
         @foreach ($bottomSliderNews as $news)
         <div class="news-card row align-items-center shadow-sm rounded-3 p-3 mb-4">

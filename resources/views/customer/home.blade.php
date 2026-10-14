@@ -414,7 +414,7 @@
     }
 
 </style>
-<section class="media-section mt-4">
+<!-- <section class="media-section mt-4">
 
     {{-- تصویر شاخص --}}
     <div class="media-box">
@@ -442,7 +442,7 @@
         </div>
     </div>
 
-</section>
+</section> -->
 
 
 <style>
@@ -451,8 +451,8 @@
     }
 
     [data-bs-theme="dark"] .news-card,
-    [data-bs-theme="dark"] .media-box,
-    [data-bs-theme="dark"] .media-header,
+    /* [data-bs-theme="dark"] .media-box,
+    [data-bs-theme="dark"] .media-header, */
     [data-bs-theme="dark"] .feedback-box {
         background-color: #2c2f34 !important;
         color: #f1f1f1;
@@ -505,7 +505,7 @@
         padding: 0.5rem;
     }
 
-    .media-content {
+    /* .media-content {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -517,7 +517,7 @@
         max-width: 100%;
         max-height: 200px;
         border-radius: 12px;
-    }
+    } */
 
     @media (max-width: 768px) {
         .media-box {

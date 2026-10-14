@@ -14,7 +14,7 @@ class CategoryController extends Controller
         $news_category = $category->news()
             ->where('status', 1)
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(4, ['*'], 'page');
 
     //   dd($news_category[0]);
     //   $categories = Category::where('status', 1)->withCount('news')->get();

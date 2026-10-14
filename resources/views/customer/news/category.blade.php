@@ -83,8 +83,115 @@
 
                 </div>
             @endforeach
+
+            @if ($news_category->lastPage() > 1)
+                <div class="custom-pagination-container">
+                    <ul class="custom-pagination">
+
+                        {{-- دکمه قبلی --}}
+                        <li class="{{ $news_category->onFirstPage() ? 'disabled' : '' }}">
+                            <a href="{{ $news_category->previousPageUrl() ?? '#' }}" rel="prev">&laquo;</a>
+                        </li>
+
+                        @php
+                        $current = $news_category->currentPage();
+                        $last = $news_category->lastPage();
+                        @endphp
+
+                        {{-- صفحه اول --}}
+                        @if ($current > 3)
+                        <li>
+                            <a href="{{ $news_category->url(1) }}">1</a>
+                        </li>
+                        @endif
+
+                        {{-- سه نقطه قبل --}}
+                        @if ($current > 4)
+                        <li class="disabled"><span>...</span></li>
+                        @endif
+
+                        {{-- صفحات اطراف صفحه فعلی --}}
+                        @for ($i = max(1, $current - 1); $i <= min($last, $current + 1); $i++) <li
+                            class="{{ $i == $current ? 'active' : '' }}">
+                            <a href="{{ $news_category->url($i) }}">{{ $i }}</a>
+                            </li>
+                            @endfor
+
+                            {{-- سه نقطه بعد --}}
+                            @if ($current < $last - 3) <li class="disabled"><span>...</span></li>
+                                @endif
+
+                                {{-- صفحه آخر --}}
+                                @if ($current < $last - 2) <li>
+                                    <a href="{{ $news_category->url($last) }}">{{ $last }}</a>
+                                    </li>
+                                    @endif
+
+                                    {{-- دکمه بعدی --}}
+                                    <li class="{{ !$news_category->hasMorePages() ? 'disabled' : '' }}">
+                                        <a href="{{ $news_category->nextPageUrl() ?? '#' }}" rel="next">&raquo;</a>
+                                    </li>
+
+                    </ul>
+                </div>
+                @endif
+
+                
+        <style>
+            .custom-pagination-container {
+                display: flex;
+                justify-content: center;
+                /* margin-top: 30px; */
+                direction: rtl;
+                font-family: 'Vazir', Tahoma, Arial, sans-serif;
+            }
+
+            .custom-pagination {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                gap: 8px;
+            }
+
+            .custom-pagination li {
+                display: inline-block;
+            }
+
+            .custom-pagination li a {
+                display: block;
+                padding: 8px 14px;
+                color: #444;
+                border: 1.5px solid #ddd;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                user-select: none;
+            }
+
+            .custom-pagination li a:hover:not(.disabled) {
+                background-color: #dc3545;
+                color: white;
+                border-color: #dc3545;
+            }
+
+            .custom-pagination li.active a {
+                background-color: #dc3545;
+                color: white;
+                border-color: #dc3545;
+                cursor: default;
+            }
+
+            .custom-pagination li.disabled a {
+                color: #aaa;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
+        </style>
+
         @else
-            <p class="text-light">خبری برای دسته‌بندی <span class="text-danger">{{ $category->title }}</span> یافت نشد!</p>
+            <p>خبری برای دسته‌بندی <span class="text-danger">{{ $category->title }}</span> یافت نشد!</p>
         @endif
     </div>
 </section>
